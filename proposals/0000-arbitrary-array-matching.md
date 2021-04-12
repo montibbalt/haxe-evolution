@@ -1,4 +1,4 @@
-# ::"Rest" Pattern Matching for Arrays::
+# Arbitrary-length Array Matching with `Rest`
 
 * Proposal: [HXP-NNNN](NNNN-rest-matching-arrays.md)
 * Author: [Evan Montembeault](https://github.com/montibbalt)
@@ -19,7 +19,7 @@ length, and manually assign vars. Drawbacks of this workaround include:
 
 * The manually captured vars can't be used in the case expression (guards, etc)
 * It causes the same boilerplate that Array matching already removes
-* Using guards can cause "Unmatched patterns: _" even if all cases are covered
+* Using guards can cause `Unmatched patterns: _` even if all cases are covered
 
 ## Detailed design
 
@@ -55,7 +55,7 @@ function foo(ints:Array<Int>):String {
             var y = ints[1];
             '$x equals $y';
 
-        // But `...` could match >=N elements more clearly:
+        // But `...` could match >= N elements more clearly:
         case [x, y, ...] if(x == y):
             '$x equals $y';
 
@@ -76,12 +76,12 @@ function foo(ints:Array<Int>):String {
     }
 }
 
-Assert.equals('empty'       , foo(null));
-Assert.equals('empty'       , foo([]));
-Assert.equals('only 0'      , foo([0]);
+Assert.equals('empty',        foo(null));
+Assert.equals('empty',        foo([]));
+Assert.equals('only 0' ,      foo([0]);
 Assert.equals('only 0 and 1', foo([0, 1]));
-Assert.equals('0 equals 0'  , foo([0, 0, 2]));
-Assert.equals('0 :: [1, 2]' , foo([0, 1, 2]));
+Assert.equals('0 equals 0',   foo([0, 0, 2]));
+Assert.equals('0 :: [1, 2]',  foo([0, 1, 2]));
 ```
 
 Other languages support similar patterns (at least with Lists). It is so common
@@ -98,7 +98,7 @@ quicksort (p:xs) = (quicksort lesser) ++ [p] ++ (quicksort greater)
 ```
 
 Versus the same implementation in Haxe if this is accepted and doesn't require
-and "impossible" case:
+an "impossible" case:
 
 ```haxe
 // A `...rest` pattern feels natural here
@@ -135,7 +135,9 @@ macro-in-macro issues?
 ## Opening possibilities
 
 More advanced patterns could be unlocked by allowing the syntax in other
-positions. For example, `case [a, ..., c]:` could capture the first and last elements of an Array with length >= 2.
+positions.  
+For example, `case [a, ..., c]:` could capture the first and last elements of an
+Array with length >= 2.
 
 With more consideration, this might enable a similar type of matching on
 `Iterable`.
