@@ -102,7 +102,7 @@ an "impossible" case:
 
 ```haxe
 // A `...rest` pattern feels natural here
-function quicksort(arr:Array<Int>):Array<Int> {
+function quicksort(arr:Array<Int>):Array<Int>
     return switch arr {
         case []: [];
         case [p, ...xs]:
@@ -110,7 +110,6 @@ function quicksort(arr:Array<Int>):Array<Int> {
             var greater = xs.filter(y -> y > p);
             quicksort(lesser).concat([p]).concat(quicksort(greater));
     }
-}
 ```
 
 ## Impact on existing code
@@ -120,12 +119,10 @@ should not impact existing code.
 
 ## Drawbacks
 
-It could become confusing whether an exact Array length is required or not.
-
-This could make the order of patterns even more significant.
-
-There could also be performance implications that are hidden from the developer
-if e.g. Array slicing is used to capture the "Rest" of the Array.
+- It could become confusing whether an exact Array length is required or not.
+- This could make the order of patterns more significant.
+- There could also be performance implications that are hidden from the
+developer depending on the implementation.
 
 ## Alternatives
 
@@ -134,13 +131,16 @@ macro-in-macro issues?
 
 ## Opening possibilities
 
+With more consideration, this also might enable a similar type of matching on
+`Iterable`.
+
 More advanced patterns could be unlocked by allowing the syntax in other
 positions.  
 For example, `case [a, ..., c]:` could capture the first and last elements of an
 Array with length >= 2.
 
-With more consideration, this might enable a similar type of matching on
-`Iterable`.
+Matching on many values might be able to use this syntax as a convenience if a
+pattern would otherwise have a lot of wildcards.
 
 ## Unresolved questions
 
